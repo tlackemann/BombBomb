@@ -1,14 +1,11 @@
-var app = require('http').createServer(handler)
-  , io = require('socket.io').listen(app)
-  , fs = require('fs')
- 
+var app = require('http').createServer(handler);
+var io = require('socket.io').listen(app);
+var fs = require('fs');
 
 app.listen(8080);
 
-var playerlocation = 0;
-var playerlist = [];
-
-
+var playerLocation = 0;
+var playerList = [];
 
 function handler (req, res) {
   fs.readFile(__dirname + '/index.html',
@@ -24,43 +21,24 @@ function handler (req, res) {
 }
 
 io.sockets.on('connection', function (socket) {
-  
-     
-  
-socket.on('recievedata', function (positionx,positiony,currentanimation,gamename) {
-   
-     socket.broadcast.emit('playermove', positionx,positiony,currentanimation,gamename);
-    
-    
-  }); 
 
-  
-   
-  
-  
-  socket.on('initializeplayer', function (newplayername) {
- 
-    socket.clientname = newplayername;
-     playerlist.push(newplayername);
- io.sockets.emit('addplayer',playerlist,newplayername);
-   
-   
-  });
- socket.on('disconnect', function(){
-   delete playerlist[socket.clientname];
- for(var i in playerlist)
- {
-  if(playerlist[i] == socket.clientname)
-  {
-    playerlist.splice(i, 1);
-  }
- }
-socket.broadcast.emit('message',socket.clientname);
- socket.broadcast.emit('netreplayer',playerlist);
- 
- 
+socket.on('recieveData', function (positionX, positionY, currentAnimation, gameName) {
+  socket.broadcast.emit('playerMove', positionX, positionY,currentAnimation, gameName);
+}); 
+
+socket.on('initializePlayer', function (newPlayerName) {
+  socket.clientname = newPlayerName;
+  playerList.push(newPlayerName);
+  io.sockets.emit('addPlayer',playerList,newPlayerName);
 });
- 
 
- 
+socket.on('disconnect', function(){
+  delete playerList[socket.clientname];
+  for(var i in playerList) {
+    if(playerList[i] == socket.clientname) {
+      playerList.splice(i, 1);
+    }
+  }
+  socket.broadcast.emit('message',socket.clientname);
+  socket.broadcast.emit('netreplayer',playerList);
 });
