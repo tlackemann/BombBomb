@@ -2,86 +2,17 @@
 <html>
 <head>
 	<script src="http://localhost:8080/socket.io/socket.io.js"></script>
-	<title>Bomb!Bomb!</title>
-	<style type="text/css">
-		html,body {
-			background-color: #000;
-			color: #fff;
-			font-family: helvetica, arial, sans-serif;
-			margin: 0;
-			padding: 0;
-			font-size: 12pt;
-		}
-		
-		#canvas {
-			position: absolute;
-			left: 0;
-			right: 0;
-			top: 0;
-			bottom: 0;
-			margin: auto;
-			border: 1px solid #555;
-		}
-	</style>
-
+	<title>Bomb! Bomb!</title>
+	<link rel="stylesheet" type="text/css" media="screen" href="styles.css" />
 	<script type="text/javascript" src="lib/impact/impact.js"></script>
 	<script type="text/javascript" src="lib/game/main.js"></script>
+	<script type="text/javascript" src="client.js"></script>
 </head>
 <body>
-	<script type="text/javascript">
-	  var namerAnd  = Math.floor(Math.random()*999);
-		var playerName = "player" + namerAnd;
-	 
-	  var socket = io.connect('http://localhost:8080');
+	<header>
+		<div id="logo"></div>
+	</header>
 
-		socket.on('message', function (data) {
-    	var player = ig.game.getEntitiesByType(EntityPlayer)[0];
-	 		if(player) {
-	 			player.messageBox = player.messageBox + '\n' + data + ' disconnected';
-	 		}
-    });	 
-	 	
-	 	socket.on('playerMove', function (positionX, positionY, currentAnimation,thisGameName) {
-    	var otherPlayer = ig.game.getEntitiesByType(EntityOtherPlayer);
-    
-    	if(otherPlayer) {
-     		for(var i in otherPlayer) {
-	 				if(thisGameName == otherPlayer[i].gameName) {
-     				otherPlayer[i].pos.x = positionX;
-     				otherPlayer[i].pos.y = positionY;
-     				otherPlayer[i].animation = currentAnimation;
-	 				}
-	 			}
-	 		}
-    }); 
-	 
-		 
-	  socket.on('netReplayer', function (playerList) {
-      var netPlayers = ig.game.getEntitiesByType(EntityOtherPlayer);
-			//loop to see if players exist
-			if(netPlayers) {
-			  for(var i in netPlayers) {
-			  	netPlayers[i].kill();
-		 		}
-		 	}
-		 
-			for(var i in playerList) {
-		 		if(playerName != playerList[i]) {
-			  	ig.game.spawnEntity(EntityOtherplayer, 160, 260, {gameName: playerList[i]} );
-		 		}
-		 	}
-		});
-
- 		socket.on('addPlayer', function (playerList,otherPlayerName) {
-	  	var player = ig.game.getEntitiesByType(EntityPlayer)[0];
-	 		player.messageBox = player.messageBox + '\n' + otherPlayerName + ' joined';
-	 		for(var i = 0; i<playerList.length;i++) {
-				if(player.gameName != playerList[i]) {  
-		 			ig.game.spawnEntity(EntityOtherPlayer, 160, 260, {gameName:playerList[i]} );
-				}
-			}
-    });
-	</script>
 	<canvas id="canvas"></canvas>
 </body>
 </html>

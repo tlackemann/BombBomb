@@ -22,17 +22,17 @@ function handler (req, res) {
 
 io.sockets.on('connection', function (socket) {
 
-  socket.on('recieveData', function (positionX, positionY, currentAnimation, gameName) {
-    socket.broadcast.emit('playerMove', positionX, positionY, currentAnimation, gameName);
-  }); 
-
   socket.on('initializePlayer', function (newPlayerName) {
     socket.clientname = newPlayerName;
     playerList.push(newPlayerName);
     io.sockets.emit('addPlayer',playerList,newPlayerName);
   });
 
-  socket.on('disconnect', function(){
+  socket.on('movePlayer', function (velocityX, velocityY, gameName) {
+    socket.broadcast.emit("playerMove", velocityX, velocityY, gameName);
+  });
+
+  socket.on('disconnect', function () {
     delete playerList[socket.clientname];
     for(var i in playerList) {
       if(playerList[i] == socket.clientname) {
