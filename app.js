@@ -23,7 +23,7 @@ function handler (req, res) {
 io.sockets.on('connection', function (socket) {
 
   socket.on('recieveData', function (positionX, positionY, currentAnimation, gameName) {
-    socket.broadcast.emit('playerMove', positionX, positionY,currentAnimation, gameName);
+    socket.broadcast.emit('playerMove', positionX, positionY, currentAnimation, gameName);
   }); 
 
   socket.on('initializePlayer', function (newPlayerName) {
@@ -40,7 +40,7 @@ io.sockets.on('connection', function (socket) {
       }
     }
     socket.broadcast.emit('message',socket.clientname);
-    socket.broadcast.emit('netreplayer',playerList);
+    socket.broadcast.emit('netReplayer',playerList);
   });
 
 });

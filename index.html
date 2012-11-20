@@ -29,71 +29,58 @@
 </head>
 <body>
 	<script type="text/javascript">
-	  var namerand  = Math.floor(Math.random()*999);
-	var playerName = "player" + namerand;
+	  var namerAnd  = Math.floor(Math.random()*999);
+		var playerName = "player" + namerAnd;
 	 
 	  var socket = io.connect('http://localhost:8080');
 
-socket.on('message', function (data) {
-       var player = ig.game.getEntitiesByType( EntityPlayer )[0];
-	 if(player)
-	 {
-	 player.messageBox = player.messageBox + '\n' + data + ' disconnected';
-	 }
-      });	 
-	 
-	 
-socket.on('playermove', function (positionx,positiony,currentanimation,thisgamename) {
-     var otherplayer = ig.game.getEntitiesByType( EntityOtherplayer );
+		socket.on('message', function (data) {
+    	var player = ig.game.getEntitiesByType(EntityPlayer)[0];
+	 		if(player) {
+	 			player.messageBox = player.messageBox + '\n' + data + ' disconnected';
+	 		}
+    });	 
+	 	
+	 	socket.on('playerMove', function (positionX, positionY, currentAnimation,thisGameName) {
+    	var otherPlayer = ig.game.getEntitiesByType(EntityOtherPlayer);
     
-    if(otherplayer)
-    {
-     for(var i in otherplayer)
-	 {
-	 if(thisgamename == otherplayer[i].gamename)
-	 {
-     otherplayer[i].pos.x = positionx;
-     otherplayer[i].pos.y = positiony;
-     
-    otherplayer[i].animation = currentanimation;
-	 }}}
-      }); 
+    	if(otherPlayer) {
+     		for(var i in otherPlayer) {
+	 				if(thisGameName == otherPlayer[i].gameName) {
+     				otherPlayer[i].pos.x = positionX;
+     				otherPlayer[i].pos.y = positionY;
+     				otherPlayer[i].animation = currentAnimation;
+	 				}
+	 			}
+	 		}
+    }); 
 	 
 		 
-	  socket.on('netreplayer', function (playerlist) {
-        var netplayers = ig.game.getEntitiesByType( EntityOtherplayer );
-//////////////loop to see if players exist
-	if(netplayers){
-		  for(var i in netplayers)
-	 {
-		  netplayers[i].kill();
-	 }}
-	 
-	for(var i in playerlist)
-	 {
-	 if(playername != playerlist[i])
-	 {
-		  ig.game.spawnEntity( EntityOtherplayer, 160, 260, {gamename:playerlist[i]} );
-	 }
-	 }
+	  socket.on('netReplayer', function (playerList) {
+      var netPlayers = ig.game.getEntitiesByType(EntityOtherPlayer);
+			//loop to see if players exist
+			if(netPlayers) {
+			  for(var i in netPlayers) {
+			  	netPlayers[i].kill();
+		 		}
+		 	}
+		 
+			for(var i in playerList) {
+		 		if(playerName != playerList[i]) {
+			  	ig.game.spawnEntity(EntityOtherplayer, 160, 260, {gameName: playerList[i]} );
+		 		}
+		 	}
+		});
 
-/////////////////////////////////
-      });
-	  
-	  
- socket.on('addplayer', function (playerlist,otherplayername) {
-	  var player = ig.game.getEntitiesByType( EntityPlayer )[0];
-	 player.messageBox = player.messageBox + '\n' + otherplayername + ' joined';
-	 for(var i = 0;i<playerlist.length;i++)
-	  {
-		if(player.gamename != playerlist[i])
-	 {  
-		 ig.game.spawnEntity( EntityOtherplayer, 160, 260, {gamename:playerlist[i]} );
-		
-      
-	 }}
-	
-      });
+ 		socket.on('addPlayer', function (playerList,otherPlayerName) {
+	  	var player = ig.game.getEntitiesByType(EntityPlayer)[0];
+	 		player.messageBox = player.messageBox + '\n' + otherPlayerName + ' joined';
+	 		for(var i = 0; i<playerList.length;i++) {
+				if(player.gameName != playerList[i]) {  
+		 			ig.game.spawnEntity(EntityOtherPlayer, 160, 260, {gameName:playerList[i]} );
+				}
+			}
+    });
 	</script>
 	<canvas id="canvas"></canvas>
 </body>
