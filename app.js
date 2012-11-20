@@ -36,6 +36,10 @@ io.sockets.on('connection', function (socket) {
     socket.broadcast.emit("playerStop", positionX, positionY, direction, gameName);
   });
 
+  socket.on('plantBomb', function (positionX, positionY, gameName) {
+    socket.broadcast.emit("playerPlant", positionX, positionY, gameName);
+  });
+
   socket.on('disconnect', function () {
     delete playerList[socket.clientname];
     for(var i in playerList) {

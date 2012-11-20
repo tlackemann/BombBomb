@@ -35,6 +35,10 @@ socket.on('playerStop', function (positionX, positionY, direction, gameName) {
 			}
 		}
 }); 
+
+socket.on('playerPlant', function(positionX, positionY, gameName) {
+	ig.game.spawnEntity(EntityBomb, positionX, positionY, gameName+"_bomb" );
+});
  
 socket.on('netReplayer', function (playerList) {
   var netPlayers = ig.game.getEntitiesByType(EntityOtherPlayer);
