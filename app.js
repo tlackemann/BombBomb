@@ -1,6 +1,6 @@
-var app = require('http').createServer(handler);
-var io = require('socket.io').listen(app);
-var fs = require('fs');
+var app = require('http').createServer(handler)
+, io = require('socket.io').listen(app)
+, fs = require('fs');
 
 app.listen(8080);
 
@@ -22,23 +22,25 @@ function handler (req, res) {
 
 io.sockets.on('connection', function (socket) {
 
-socket.on('recieveData', function (positionX, positionY, currentAnimation, gameName) {
-  socket.broadcast.emit('playerMove', positionX, positionY,currentAnimation, gameName);
-}); 
+  socket.on('recieveData', function (positionX, positionY, currentAnimation, gameName) {
+    socket.broadcast.emit('playerMove', positionX, positionY,currentAnimation, gameName);
+  }); 
 
-socket.on('initializePlayer', function (newPlayerName) {
-  socket.clientname = newPlayerName;
-  playerList.push(newPlayerName);
-  io.sockets.emit('addPlayer',playerList,newPlayerName);
-});
+  socket.on('initializePlayer', function (newPlayerName) {
+    socket.clientname = newPlayerName;
+    playerList.push(newPlayerName);
+    io.sockets.emit('addPlayer',playerList,newPlayerName);
+  });
 
-socket.on('disconnect', function(){
-  delete playerList[socket.clientname];
-  for(var i in playerList) {
-    if(playerList[i] == socket.clientname) {
-      playerList.splice(i, 1);
+  socket.on('disconnect', function(){
+    delete playerList[socket.clientname];
+    for(var i in playerList) {
+      if(playerList[i] == socket.clientname) {
+        playerList.splice(i, 1);
+      }
     }
-  }
-  socket.broadcast.emit('message',socket.clientname);
-  socket.broadcast.emit('netreplayer',playerList);
+    socket.broadcast.emit('message',socket.clientname);
+    socket.broadcast.emit('netreplayer',playerList);
+  });
+
 });
