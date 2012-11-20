@@ -28,8 +28,12 @@ io.sockets.on('connection', function (socket) {
     io.sockets.emit('addPlayer',playerList,newPlayerName);
   });
 
-  socket.on('movePlayer', function (velocityX, velocityY, gameName) {
-    socket.broadcast.emit("playerMove", velocityX, velocityY, gameName);
+  socket.on('movePlayer', function (positionX, positionY, direction, gameName) {
+    socket.broadcast.emit("playerMove", positionX, positionY, direction, gameName);
+  });
+  
+  socket.on('stopPlayer', function (positionX, positionY, direction, gameName) {
+    socket.broadcast.emit("playerStop", positionX, positionY, direction, gameName);
   });
 
   socket.on('disconnect', function () {
