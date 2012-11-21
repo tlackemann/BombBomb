@@ -3,3 +3,4 @@ lib/weltmeister
 weltmeister.html
 tools/
 .DS_Store
+node_modules/
