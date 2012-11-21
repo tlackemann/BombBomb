@@ -11,26 +11,26 @@ socket.on('message', function (data) {
 });	 
 	
 socket.on('playerMove', function (positionX, positionY, direction, gameName) {
-	var otherPlayer = ig.game.getEntitiesByType(EntityOtherPlayer);
+	var netPlayer = ig.game.getEntitiesByType(EntityNetPlayer);
 
-	if(otherPlayer) {
- 		for(var i in otherPlayer) {
-				if(gameName == otherPlayer[i].gameName) {
-					otherPlayer[i].netMove(positionX, positionY, direction);
-					console.log("Moving: " + otherPlayer[i].gameName + " { x:"+positionX+", y:"+positionY+", direction:"+direction+" }");
+	if(netPlayer) {
+ 		for(var i in netPlayer) {
+				if(gameName == netPlayer[i].gameName) {
+					netPlayer[i].netMove(positionX, positionY, direction);
+					console.log("Moving: " + netPlayer[i].gameName + " { x:"+positionX+", y:"+positionY+", direction:"+direction+" }");
 				}
 			}
 		}
 }); 
 
 socket.on('playerStop', function (positionX, positionY, direction, gameName) {
-	var otherPlayer = ig.game.getEntitiesByType(EntityOtherPlayer);
+	var netPlayer = ig.game.getEntitiesByType(EntityNetPlayer);
 
-	if(otherPlayer) {
- 		for(var i in otherPlayer) {
-				if(gameName == otherPlayer[i].gameName) {
-					otherPlayer[i].netStop(positionX, positionY, direction);
-					console.log("Stopping: " + otherPlayer[i].gameName + " { x:"+positionX+", y:"+positionY+", direction:"+direction+" }");
+	if(netPlayer) {
+ 		for(var i in netPlayer) {
+				if(gameName == netPlayer[i].gameName) {
+					netPlayer[i].netStop(positionX, positionY, direction);
+					console.log("Stopping: " + netPlayer[i].gameName + " { x:"+positionX+", y:"+positionY+", direction:"+direction+" }");
 				}
 			}
 		}
@@ -41,7 +41,7 @@ socket.on('playerPlant', function(positionX, positionY, gameName) {
 });
  
 socket.on('netReplayer', function (playerList) {
-  var netPlayers = ig.game.getEntitiesByType(EntityOtherPlayer);
+  var netPlayers = ig.game.getEntitiesByType(EntityNetPlayer);
 	//loop to see if players exist
 	if(netPlayers) {
 	  for(var i in netPlayers) {
@@ -51,17 +51,17 @@ socket.on('netReplayer', function (playerList) {
  
 	for(var i in playerList) {
  		if(playerName != playerList[i]) {
-	  	ig.game.spawnEntity(EntityOtherplayer, 160, 260, {gameName: playerList[i]} );
+	  	ig.game.spawnEntity(EntityNetPlayer, 160, 260, {gameName: playerList[i]} );
  		}
  	}
 });
 
-	socket.on('addPlayer', function (playerList,otherPlayerName) {
+	socket.on('addPlayer', function (playerList,netPlayerName) {
 	var player = ig.game.getEntitiesByType(EntityPlayer)[0];
-		player.messageBox = player.messageBox + '\n' + otherPlayerName + ' joined';
+		player.messageBox = player.messageBox + '\n' + netPlayerName + ' joined';
 		for(var i = 0; i<playerList.length;i++) {
 		if(player.gameName != playerList[i]) {  
- 			ig.game.spawnEntity(EntityOtherPlayer, ig.system.width/2, ig.system.height/2, {gameName:playerList[i]} );
+ 			ig.game.spawnEntity(EntityNetPlayer, ig.system.width/2, ig.system.height/2, {gameName:playerList[i]} );
 		}
 	}
 });
